@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaidNotificator", "RaidNotificator\RaidNotificator.csproj", "{912A7BAE-9B32-4025-8E8E-EE1321807DA2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{912A7BAE-9B32-4025-8E8E-EE1321807DA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{912A7BAE-9B32-4025-8E8E-EE1321807DA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{912A7BAE-9B32-4025-8E8E-EE1321807DA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{912A7BAE-9B32-4025-8E8E-EE1321807DA2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
