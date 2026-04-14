@@ -1,28 +1,53 @@
 ﻿services:
   mongo:
-    image: mongo:7
+    image: mongo:7-bookworm
     container_name: raidnotificator-mongo
     restart: unless-stopped
     ports:
       - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-changeme}
     volumes:
       - mongo_data:/data/db
+    networks:
+      - raidnet
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   bot:
     build:
       context: .
       dockerfile: RaidNotificator/Dockerfile
+      args:
+        - BUILDKIT_INLINE_CACHE=1
     container_name: raidnotificator-bot
     restart: unless-stopped
     depends_on:
-      - mongo
-    user: "0:0"
+      mongo:
+        condition: service_healthy
     environment:
       DCToken: ${DCToken}
       GuildId: ${GuildId}
       ChannelName: ${ChannelName}
-      ConnectionStrings__MongoDBConnectionStringDev: mongodb://localhost:27017
-      ConnectionStrings__MongoDBConnectionStringProd: mongodb://mongo:27017
+      AdminClientId: ${AdminClientId}
+      ConnectionString: ${ConnectionString}
+      DOTNET_EnableDiagnostics: "0"
+    networks:
+      - raidnet
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   mongo_data:
+    driver: local
+
+networks:
+  raidnet:
+    driver: bridge

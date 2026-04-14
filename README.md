@@ -1,2 +1,30 @@
 # hausapotheke-raid-helper-notificator
-hausapotheke-raid-helper-notificator is a discord bot which is designed to listen on Raid-Helper messages/event changes/event creations. This bot provides direct messaging users and reporting changes in the raid-event registration on demand.
+
+Discord bot fuer Raid-Helper Event-Updates mit MongoDB Persistenz.
+
+## Konfiguration
+
+Per User Secrets oder Umgebungsvariablen:
+
+- `DCToken`
+- `GuildId`
+- `ChannelName`
+- `ConnectionStrings__MongoDBConnectionStringDev`
+- `ConnectionStrings__MongoDBConnectionStringProd`
+- optional: `RaidHelperBaseUrl` (default `https://raid-helper.xyz/api/v4/`)
+- optional: `ENV` (`PROD` -> Prod-ConnectionString, sonst Dev)
+
+## Slash Commands
+
+- `/init` -> letzte 10 Nachrichten des konfigurierten Channels in DB syncen
+- `/reset` -> Event-Datenbank leeren
+- `/sub` -> Benutzer fuer DM-Benachrichtigungen eintragen
+- `/unsub` -> Benutzer austragen
+
+## Architektur
+
+- `Hosting/DiscordBotHostedService` -> Discord Lifecycle
+- `Discord/SlashCommand*` -> Registrierung + Verarbeitung von Commands
+- `Application/*` -> Business-Logik
+- `Infrastructure/*` -> API/Mongo
+- `Contracts/*` -> Interfaces

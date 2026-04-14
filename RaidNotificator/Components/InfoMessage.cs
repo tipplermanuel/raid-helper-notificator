@@ -4,9 +4,9 @@ using RaidNotificator.DTOs;
 
 namespace RaidNotificator.Components;
 
-public class InfoMessage
+public static class InfoMessage
 {
-    public static async Task<ComponentBuilderV2> UpdateRegistrationInfoAsync(RegistrationDiff diff, RaidEvent e)
+    public static ComponentBuilderV2 UpdateRegistrationInfoAsync(RegistrationDiff diff, RaidEvent e)
     {
         var builder = new ComponentBuilderV2();
         
@@ -19,23 +19,25 @@ public class InfoMessage
                 if (string.IsNullOrEmpty(diff.OldClass))
                 {
                     container.WithTextDisplay("### Anmeldung")
-                        .WithTextDisplay($"**{diff.Username}** hat sich als `{diff.Role} {diff.Class}` angemeldet.");
+                        .WithTextDisplay($"**{diff.Username}** hat sich als `{diff.Role} {diff.Spec} {diff.Class}` angemeldet.");
                 }
                 else
                 {
                     container.WithTextDisplay("### Ummeldung")
-                        .WithTextDisplay($"**{diff.Username}** hat sich von `{(IsMimimiClass(diff.OldClass) ? string.Empty : $"{diff.Role} ")}{diff.OldClass}` zu `{diff.Role} {diff.Class}` umgemeldet.");                    
+                        .WithTextDisplay($"**{diff.Username}** hat sich von `{(IsMimimiClass(diff.OldClass) ? string.Empty : $"{diff.Role} {diff.Spec} ")}{diff.OldClass}` zu `{diff.Role} {diff.Class}` umgemeldet.");                    
                 }
                 break;
             case DiffType.SignedOut:
                 container.AccentColor = Color.Red;
                 container.WithTextDisplay("### Abmeldung")
-                    .WithTextDisplay($"**{diff.Username}** hat sich von `{diff.Role} {diff.OldClass}` zu `{diff.Class}` umgemeldet.");     
+                    .WithTextDisplay($"**{diff.Username}** hat sich von `{diff.Role} {diff.Spec} {diff.OldClass} ` zu `{diff.Class}` umgemeldet.");     
                 break;
             case DiffType.Late:
                 container.AccentColor = Color.Orange;
                 container.WithTextDisplay("### Kommt später")
-                    .WithTextDisplay($"**{diff.Username}** hat sich von `{(IsMimimiClass(diff.OldClass) ? string.Empty : $"{diff.Role} ")}{diff.OldClass}` zu `{diff.Class}` umgemeldet.");
+                    .WithTextDisplay($"**{diff.Username}** hat sich von `{(IsMimimiClass(diff.OldClass) ? string.Empty : $"{diff.Role} {diff.Spec} ")}{diff.OldClass}` zu `{diff.Class}` umgemeldet.");
+                break;
+            default:
                 break;
         }
         container.WithTextDisplay($"Es sind **{e.SignUps.Count(s => !s.ClassName.Equals("Bench") && !s.ClassName.Equals("Absence"))}** Personen zu `{e.Title}` angemmeldet");
@@ -43,7 +45,7 @@ public class InfoMessage
         return builder.WithContainer(container);
     }
 
-    public static async Task<ComponentBuilderV2> NewEventMessageAsync(SocketGuildEvent e)
+    public static ComponentBuilderV2 NewEventMessageAsync(SocketGuildEvent e)
     {
         var builder = new ComponentBuilderV2();
 
@@ -56,9 +58,9 @@ public class InfoMessage
         return builder.WithContainer(container);
     }
     
-    private static readonly List<string> mimimiList = new List<string> { "Bench", "Late", "Absence", "Tentative" };
+    private static readonly List<string> MimimiList = new List<string> { "Bench", "Late", "Absence", "Tentative" };
     private static bool IsMimimiClass(string c){
-        return mimimiList.Contains(c);
+        return MimimiList.Contains(c);
         
     }
 }
