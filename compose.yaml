@@ -1,13 +1,10 @@
 ﻿services:
   mongo:
-    image: mongodb/mongodb-community-server:4.4-ubuntu2204-slim
+    image: mongo:7.0
     container_name: raidnotificator-mongo
     restart: unless-stopped
     ports:
       - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME:-admin}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-changeme}
     volumes:
       - mongo_data:/data/db
     networks:
@@ -17,13 +14,11 @@
       interval: 10s
       timeout: 5s
       retries: 5
-
-  bot:
+      
+   bot:
     build:
       context: .
       dockerfile: RaidNotificator/Dockerfile
-      args:
-        - BUILDKIT_INLINE_CACHE=1
     container_name: raidnotificator-bot
     restart: unless-stopped
     depends_on:
@@ -38,12 +33,6 @@
       DOTNET_EnableDiagnostics: "0"
     networks:
       - raidnet
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-
 volumes:
   mongo_data:
     driver: local
