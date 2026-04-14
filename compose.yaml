@@ -29,7 +29,7 @@ services:
       GuildId: ${GuildId}
       ChannelName: ${ChannelName}
       AdminClientId: ${AdminClientId}
-      ConnectionString: ${ConnectionString}
+      ConnectionString: mongodb://mongo:27017
       DOTNET_EnableDiagnostics: "0"
     networks:
       - raidnet
