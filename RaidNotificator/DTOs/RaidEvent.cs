@@ -1,18 +1,15 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Collections.Generic;
+﻿using System.Text.Json.Serialization;
 
 namespace RaidNotificator.DTOs;
 
 public class RaidEvent
 {
-    // Das Hauptobjekt, das du von der API erhältst
     [JsonPropertyName("title")]
-    public string Title { get; set; }
-    
+    public required string Title { get; set; }
+
     [JsonPropertyName("id")]
     public string Id { get; set; } = string.Empty;
-    
+
     [JsonPropertyName("signUps")]
     public List<SignUp> SignUps { get; set; } = new();
 
@@ -46,10 +43,9 @@ public class SignUp
     [JsonPropertyName("position")]
     public int Position { get; set; }
 
-    // Optionale Felder
     [JsonPropertyName("specName")]
     public string? SpecName { get; set; }
-    
+
     [JsonPropertyName("spec2Name")]
     public string? Spec2Name { get; set; }
 }
